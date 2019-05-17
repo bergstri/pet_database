@@ -73,6 +73,8 @@ public class Petdatabase {
         boolean exitCondition=false;
         ArrayList<Pet> petArray = new ArrayList<Pet>();
         
+        System.out.println("Pet Database Program\n"); //welcome message
+        
         while(!exitCondition){
             menu.getMenu();
             menu.displayPrompt();
@@ -100,7 +102,7 @@ public class Petdatabase {
                 System.out.print("add pet (name, age): ");
                 String petName=input.next();
                 if(petName.equalsIgnoreCase("done")){
-                    System.out.println(addedPets+" pet(s) added.");
+                    System.out.println(addedPets+" pet(s) added.\n"); //added new line character for spacing
                     break;
                 }else{
                     Pet pet=new Pet();
@@ -112,9 +114,50 @@ public class Petdatabase {
                 }
                 }
             }
-            else if(choice==3||choice==4){
-                //updating and removing pets not supported yet
-                System.out.println("Unsupported operation.");
+            else if(choice==3){
+                
+                System.out.println("+-----------------------+");
+                System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',"ID",'|', "NAME",'|',"AGE",'|');
+                System.out.println("+-----------------------+");
+                for(int i=0; i<petArray.size();i++){
+                    System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',i,'|', petArray.get(i).getName(),'|',petArray.get(i).getAge(),'|');
+                }
+                System.out.println("+-----------------------+");
+                System.out.println(petArray.size()+" rows in a set. \n");
+                
+                System.out.print("Enter the pet ID you want to update: ");
+                
+                int petId=input.nextInt();
+                Pet pet=petArray.get(petId); //retrieve the pet object associated with the searched ID from the Arraylist
+                String originalName=pet.getName();
+                int originalAge=pet.getAge();
+                System.out.print("Enter new name and new age: ");
+                pet.setName(input.next());
+                pet.setAge(input.nextInt());
+                System.out.println(originalName +" " +originalAge+" changed to "+pet.getName()+" "+pet.getAge()+".\n");
+                
+            }
+            
+            else if(choice==4){
+                
+                 System.out.println("+-----------------------+");
+                System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',"ID",'|', "NAME",'|',"AGE",'|');
+                System.out.println("+-----------------------+");
+                for(int i=0; i<petArray.size();i++){
+                    System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',i,'|', petArray.get(i).getName(),'|',petArray.get(i).getAge(),'|');
+                }
+                System.out.println("+-----------------------+");
+                System.out.println(petArray.size()+" rows in a set. \n");
+                System.out.print("Enter the pet ID to remove: ");
+                
+                int petId=input.nextInt();
+                Pet pet=petArray.get(petId);
+                //retrieve the pet object associated with the searched ID from the Arraylist so we can
+                //pull the name and age and store them localy before removing the object from the Arraylist
+                String petName=pet.getName();
+                int petAge=pet.getAge();
+                petArray.remove(petArray.get(petId));
+                    System.out.println(petName+" "+petAge+" is removed.\n");
             }
             
             else if(choice==5){ //allows for the searching of pet by name
