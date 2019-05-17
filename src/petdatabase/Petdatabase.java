@@ -72,6 +72,7 @@ public class Petdatabase {
         Menu menu=new Menu();
         boolean exitCondition=false;
         ArrayList<Pet> petArray = new ArrayList<Pet>();
+        
         while(!exitCondition){
             menu.getMenu();
             menu.displayPrompt();
@@ -92,6 +93,7 @@ public class Petdatabase {
             
             else if(choice==2){
                 int addedPets=0;
+                //counter for number of pets added by the current operation
                 System.out.println("Type done when you are finished adding pets"); 
                 //added this line for clearer instructions
                 while(true){ //infinite loop to be exited by a break when user types "done"
@@ -110,9 +112,45 @@ public class Petdatabase {
                 }
                 }
             }
-            else if(choice==3||choice==4||choice==5||choice==6){
+            else if(choice==3||choice==4){
+                //updating and removing pets not supported yet
                 System.out.println("Unsupported operation.");
             }
+            
+            else if(choice==5){ //allows for the searching of pet by name
+                System.out.print("Enter a name to search: ");
+                String nameSearch=input.next();
+                
+                System.out.println("+-----------------------+");
+                System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',"ID",'|', "NAME",'|',"AGE",'|');
+                System.out.println("+-----------------------+");
+                for(int i=0; i<petArray.size();i++){
+                    if(petArray.get(i).getName().equalsIgnoreCase(nameSearch)){
+                        //if the name of the Pet object at position i in the Arraylist matches the searched name, print it
+                    System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',i,'|', petArray.get(i).getName(),'|',petArray.get(i).getAge(),'|');
+                }
+                }
+                System.out.println("+-----------------------+");
+                System.out.println(petArray.size()+" rows in a set. \n");
+            }
+            
+            else if(choice==6){ //allows for the searching of pet by age
+                System.out.print("Enter age to search: ");
+                int ageSearch=input.nextInt();
+                
+                System.out.println("+-----------------------+");
+                System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',"ID",'|', "NAME",'|',"AGE",'|');
+                System.out.println("+-----------------------+");
+                for(int i=0; i<petArray.size();i++){
+                    if(petArray.get(i).getAge()==(ageSearch)){
+                        //if the Pet object at position i in the Arraylist matches the searched age, print it
+                    System.out.printf("%c %-2s %c %-10s %c %3s %c\n",'|',i,'|', petArray.get(i).getName(),'|',petArray.get(i).getAge(),'|');
+                }
+                }
+                System.out.println("+-----------------------+");
+                System.out.println(petArray.size()+" rows in a set. \n");
+            }
+            
             else if(choice==7){
                 System.out.println("Goodbye!");
                 exitCondition=true;
