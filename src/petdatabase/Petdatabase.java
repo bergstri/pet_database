@@ -2,18 +2,31 @@
 package petdatabase;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.Serializable;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 /**
  *
  * @author ianbergstrom
  */
 
-class Pet{
+class Pet implements Serializable{
     private String name;
     private int age;
 
     /**
      * @return the name
      */
+    public Pet(){
+        //empty constructor
+    }
+    public Pet(String name, int age){
+        this.name=name;
+        this.age=age;
+    }
+    //added constructor to make it easier on reading data from file
+    
     public String getName() {
         return name;
     }
@@ -67,13 +80,23 @@ public class Petdatabase {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Scanner input=new Scanner(System.in);
         Menu menu=new Menu();
         boolean exitCondition=false;
-        ArrayList<Pet> petArray = new ArrayList<Pet>();
         
         System.out.println("Pet Database Program\n"); //welcome message
+        
+        ArrayList<Pet> petArray = new ArrayList<Pet>();
+        
+        File file=new File("petData.ser");
+        file.createNewFile(); //create a file if one does not exist already
+        Scanner fileScan=new Scanner(file);
+        
+            while(fileScan.hasNextLine()){
+                petArray.add(new Pet(fileScan.next(), fileScan.nextInt()));
+                //add any pets from the text file to the array 
+            }
         
         while(!exitCondition){
             menu.getMenu();
@@ -103,14 +126,17 @@ public class Petdatabase {
                 String petName=input.next();
                 if(petName.equalsIgnoreCase("done")){
                     System.out.println(addedPets+" pet(s) added.\n"); //added new line character for spacing
+                    
                     break;
                 }else{
                     Pet pet=new Pet();
                     pet.setName(petName);
-                    pet.setAge(input.nextInt());
+                    int petAge=input.nextInt();
+                    pet.setAge(petAge);
                     
                     petArray.add(pet);
                     addedPets++;
+                    
                 }
                 }
             }
@@ -196,6 +222,29 @@ public class Petdatabase {
             
             else if(choice==7){
                 System.out.println("Goodbye!");
+                //when the user exits, write the Pet objects to petData.ser so the user can continue later
+                //by loading the previous data from the file
+                try{
+                        FileWriter fWrite;   
+                        fWrite = new FileWriter("petData.ser");
+                        PrintWriter pWrite= new PrintWriter(fWrite);
+                        for(int i=0; i<petArray.size();i++){
+                            
+                            if(!(i==(petArray.size()-1))){
+                                pWrite.print(petArray.get(i).getName()+" "+petArray.get(i).getAge()+"\n");
+                                //only print a new line if it is not the last entry to prevent an empty line 
+                                //at the end of the file that screws with the file reading
+                            }
+                            else{
+                                pWrite.print(petArray.get(i).getName()+" "+petArray.get(i).getAge());
+                            }
+                        }
+                        
+                        pWrite.close();
+                            }
+                    catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                 exitCondition=true;
             }
         }
