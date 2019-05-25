@@ -99,6 +99,8 @@ public class Petdatabase {
             }
         
         while(!exitCondition){
+            if(petArray.size()>5) System.out.println("Caution- file has been modified and there are more entries than supported");
+            //redundancy to display message if the file has been altered to have more than 5 entries
             menu.getMenu();
             menu.displayPrompt();
             int choice= input.nextInt();
@@ -129,14 +131,28 @@ public class Petdatabase {
                     
                     break;
                 }else{
+                   
+                    if(petArray.size()>=5){
+                        System.out.print("Error: Database is Full.\n\n");
+                        input.next(); //this is sp00ky_gh0st (needed to eat up the extra input so
+                        //the program will not loop around without asking the user for input first)
+                        break;
+                    }
                     Pet pet=new Pet();
                     pet.setName(petName);
                     int petAge=input.nextInt();
+
+                    if(petAge>20 || petAge<0){
+                        System.out.println("Error: " +petAge+" is not a valid age.");
+                        //if the user attempts to enter an age greater than 20, prompt them for a different age
+                    }
+                    else{
                     pet.setAge(petAge);
                     
                     petArray.add(pet);
                     addedPets++;
-                    
+                    }
+                   
                 }
                 }
             }
@@ -152,8 +168,11 @@ public class Petdatabase {
                 System.out.println(petArray.size()+" rows in a set. \n");
                 
                 System.out.print("Enter the pet ID you want to update: ");
-                
                 int petId=input.nextInt();
+                if(petId>petArray.size()-1 || petId<0){
+                    System.out.println("Error: ID "+petId+" does not exist.\n");
+                    //check to make sure the user inputs a valid array ID
+                }else{
                 Pet pet=petArray.get(petId); //retrieve the pet object associated with the searched ID from the Arraylist
                 String originalName=pet.getName();
                 int originalAge=pet.getAge();
@@ -162,6 +181,7 @@ public class Petdatabase {
                 pet.setAge(input.nextInt());
                 System.out.println(originalName +" " +originalAge+" changed to "+pet.getName()+" "+pet.getAge()+".\n");
                 
+            }
             }
             
             else if(choice==4){
@@ -177,6 +197,10 @@ public class Petdatabase {
                 System.out.print("Enter the pet ID to remove: ");
                 
                 int petId=input.nextInt();
+                if(petId>petArray.size()-1 || petId<0){
+                    System.out.println("Error: ID "+petId+" does not exist.\n");
+                    //check to make sure the user inputs a valid array ID
+                }else{
                 Pet pet=petArray.get(petId);
                 //retrieve the pet object associated with the searched ID from the Arraylist so we can
                 //pull the name and age and store them localy before removing the object from the Arraylist
@@ -184,6 +208,7 @@ public class Petdatabase {
                 int petAge=pet.getAge();
                 petArray.remove(petArray.get(petId));
                     System.out.println(petName+" "+petAge+" is removed.\n");
+            }
             }
             
             else if(choice==5){ //allows for the searching of pet by name
