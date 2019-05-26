@@ -154,7 +154,7 @@ public class Petdatabase {
                     pet.setName(lineSplit[0]);
                     int petAge=Integer.parseInt(lineSplit[1]);
 
-                    if(petAge>20 || petAge<0){
+                    if(petAge>20 || petAge<=0){
                         System.out.println("Error: " +petAge+" is not a valid age.");
                         //if the user attempts to enter an age greater than 20, prompt them for a different age
                     }
