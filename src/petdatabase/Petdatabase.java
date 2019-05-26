@@ -123,24 +123,36 @@ public class Petdatabase {
                 //counter for number of pets added by the current operation
                 System.out.println("Type done when you are finished adding pets"); 
                 //added this line for clearer instructions
+                input.nextLine();
                 while(true){ //infinite loop to be exited by a break when user types "done"
+                
                 System.out.print("add pet (name, age): ");
-                String petName=input.next();
-                if(petName.equalsIgnoreCase("done")){
+               
+                String line=input.nextLine().trim();
+                String[] lineSplit=line.split(" ");
+                if(line.equalsIgnoreCase("done")){
                     System.out.println(addedPets+" pet(s) added.\n"); //added new line character for spacing
                     
                     break;
+                }
+                if( !(lineSplit.length==2 && (lineSplit[0] instanceof String) &&
+                        (Integer.parseInt(lineSplit[1]) == Integer.parseInt(lineSplit[1])))){
+                    System.out.print("Error: ");
+                    for(int i=0; i<lineSplit.length;i++){
+                        System.out.print(lineSplit[i]+" ");
+                    }System.out.print("is not a valid input.\n");
+                    
                 }else{
-                   
+                
+                   if(addedPets==0){}
                     if(petArray.size()>=5){
                         System.out.print("Error: Database is Full.\n\n");
-                        input.next(); //this is sp00ky_gh0st (needed to eat up the extra input so
-                        //the program will not loop around without asking the user for input first)
+                        
                         break;
-                    }
+                    }else{
                     Pet pet=new Pet();
-                    pet.setName(petName);
-                    int petAge=input.nextInt();
+                    pet.setName(lineSplit[0]);
+                    int petAge=Integer.parseInt(lineSplit[1]);
 
                     if(petAge>20 || petAge<0){
                         System.out.println("Error: " +petAge+" is not a valid age.");
@@ -148,11 +160,11 @@ public class Petdatabase {
                     }
                     else{
                     pet.setAge(petAge);
-                    
                     petArray.add(pet);
                     addedPets++;
                     }
-                   
+                    }
+                
                 }
                 }
             }
